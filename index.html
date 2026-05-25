@@ -1,0 +1,908 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Wealthprimesa - Investment Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding-bottom: 70px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a5f7a, #0d3b4f);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #57c5b6, #3a9e8f);
+            color: white;
+            border: none;
+            padding: 12px 5px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:active { transform: scale(0.96); }
+
+        /* Product Cards */
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1a5f7a;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .badge {
+            background: #ffb100;
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .product-details {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1a5f7a;
+        }
+
+        .invest-btn {
+            background: #1a5f7a;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            max-width: 500px;
+            width: 100%;
+            background: #1a5f7a;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 11px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-icon { font-size: 22px; margin-bottom: 2px; }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: #1a5f7a;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-danger { background: #dc3545; }
+        .btn-warning { background: #ffb100; color: #333; }
+
+        .info-box {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1a5f7a;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: linear-gradient(135deg, #1a5f7a, #0d3b4f);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .stat { text-align: center; flex: 1; }
+        .stat-value { font-size: 22px; font-weight: bold; }
+        .stat-label { font-size: 12px; opacity: 0.8; }
+
+        .menu-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .menu-item:active { background: #f5f5f5; }
+
+        .transaction {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pending { color: #ffb100; }
+        .approved { color: #28a745; }
+        .rejected { color: #dc3545; }
+
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .amount-btn {
+            background: #e9ecef;
+            border: 1px solid #1a5f7a;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .payment-option {
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .payment-option.selected { border-color: #1a5f7a; background: #e8f4f8; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>𝗪𝗲𝗮𝗹𝘁𝗵𝗽𝗿𝗶𝗺𝗲𝘀𝗮</h1>
+        <p>Your Trusted Investment Partner | FSCA Regulated</p>
+    </div>
+
+    <!-- PAGE 1: SIGN UP -->
+    <div id="signup-page" class="page active">
+        <h2 style="text-align:center; margin-bottom:20px;">Create Account</h2>
+        <div class="form-group">
+            <label>📱 Phone Number</label>
+            <input type="text" id="signup-phone" placeholder="e.g. 0712345678">
+        </div>
+        <div class="form-group">
+            <label>🔒 Password</label>
+            <input type="password" id="signup-password" placeholder="Create password">
+        </div>
+        <div class="form-group">
+            <label>🔒 Confirm Password</label>
+            <input type="password" id="signup-confirm" placeholder="Confirm password">
+        </div>
+        <div class="form-group">
+            <label>🎁 Referral Code (Optional)</label>
+            <input type="text" id="signup-ref" placeholder="Enter referral code">
+        </div>
+        <button class="btn" onclick="signup()">Sign Up</button>
+        <p style="text-align:center; margin-top:15px;">Already have an account? <span style="color:#1a5f7a; font-weight:bold; cursor:pointer;" onclick="showPage('signin-page')">Sign In</span></p>
+    </div>
+
+    <!-- PAGE 2: SIGN IN -->
+    <div id="signin-page" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Welcome Back</h2>
+        <div class="form-group">
+            <label>📱 Phone Number</label>
+            <input type="text" id="signin-phone" placeholder="Enter phone number">
+        </div>
+        <div class="form-group">
+            <label>🔒 Password</label>
+            <input type="password" id="signin-password" placeholder="Enter password">
+        </div>
+        <button class="btn" onclick="signin()">Sign In</button>
+        <p style="text-align:center; margin-top:15px;">New here? <span style="color:#1a5f7a; font-weight:bold; cursor:pointer;" onclick="showPage('signup-page')">Sign Up</span></p>
+    </div>
+
+    <!-- PAGE 3: HOME DASHBOARD -->
+    <div id="home-page" class="page">
+        <div class="quick-actions">
+            <button class="action-btn" onclick="showPage('deposit-page')">💰 Recharge</button>
+            <button class="action-btn" onclick="showPage('withdrawal-page')">💸 Withdrawal</button>
+            <button class="action-btn" onclick="showPage('promotion-page')">🎁 Promotion</button>
+            <button class="action-btn" onclick="showPage('bonus-page')">✨ Bonus</button>
+        </div>
+
+        <div id="products-container"></div>
+    </div>
+
+    <!-- PAGE 4: DEPOSIT -->
+    <div id="deposit-page" class="page">
+        <h2 style="margin-bottom:20px;">💰 Deposit Funds</h2>
+        <div class="form-group">
+            <label>Select Amount</label>
+            <div class="amount-buttons">
+                <div class="amount-btn" onclick="setDepositAmount(50)">R50</div>
+                <div class="amount-btn" onclick="setDepositAmount(100)">R100</div>
+                <div class="amount-btn" onclick="setDepositAmount(180)">R180</div>
+                <div class="amount-btn" onclick="setDepositAmount(300)">R300</div>
+                <div class="amount-btn" onclick="setDepositAmount(500)">R500</div>
+                <div class="amount-btn" onclick="setDepositAmount(1000)">R1000</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Or Enter Amount</label>
+            <input type="number" id="deposit-amount" placeholder="Enter amount (min R50)">
+        </div>
+        <div class="form-group">
+            <label>Payment Method</label>
+            <div class="payment-option" onclick="selectPayment('absa')" id="payment-absa">
+                🏦 ABSA Bank Direct Deposit
+            </div>
+            <div class="payment-option" onclick="selectPayment('payshap')" id="payment-payshap">
+                📱 PayShap Deposit
+            </div>
+        </div>
+        <button class="btn" onclick="proceedToPayment()">Continue to Payment</button>
+        <button class="btn" style="background:#666;" onclick="showPage('home-page')">Back</button>
+    </div>
+
+    <!-- PAGE 5: PAYMENT CONFIRMATION -->
+    <div id="payment-page" class="page">
+        <h2>💳 Bank Transfer Details</h2>
+        <div class="info-box">
+            <p><strong>Bank:</strong> CAPITEC</p>
+            <p><strong>Account Number:</strong> 1243540397</p>
+            <p><strong>Reference:</strong> <span id="payment-ref"></span></p>
+            <p><strong>Amount:</strong> R<span id="payment-amount"></span></p>
+        </div>
+        <div class="form-group">
+            <label>Upload Proof of Payment (PDF/Image)</label>
+            <input type="file" id="proof-file" accept="image/*,application/pdf">
+        </div>
+        <button class="btn" onclick="submitDeposit()">Submit Deposit</button>
+        <button class="btn" style="background:#666;" onclick="showPage('deposit-page')">Back</button>
+    </div>
+
+    <!-- PAGE 6: WITHDRAWAL -->
+    <div id="withdrawal-page" class="page">
+        <h2>💸 Withdraw Funds</h2>
+        <div class="info-box" id="withdrawable-display"></div>
+        <div class="form-group">
+            <label>Select Bank</label>
+            <select id="withdraw-bank">
+                <option value="ABSA Bank">ABSA Bank</option>
+                <option value="CAPITEC Bank">CAPITEC Bank</option>
+                <option value="NEDBANK">NEDBANK</option>
+                <option value="FNB">FNB</option>
+                <option value="Standard Bank">Standard Bank</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Account Number</label>
+            <input type="text" id="withdraw-account" placeholder="Enter account number">
+        </div>
+        <div class="form-group">
+            <label>Amount to Withdraw</label>
+            <input type="number" id="withdraw-amount" placeholder="Enter amount">
+        </div>
+        <button class="btn" onclick="requestWithdrawal()">Withdraw Now</button>
+        <button class="btn" style="background:#666;" onclick="showPage('home-page')">Back</button>
+    </div>
+
+    <!-- PAGE 7: PROMOTION / REFERRAL -->
+    <div id="promotion-page" class="page">
+        <h2>🎁 Refer & Earn</h2>
+        <div class="info-box">
+            <p>Invite friends to join Wealthprimesa and earn <strong>10%</strong> of their first deposit!</p>
+        </div>
+        <div class="form-group">
+            <label>Your Referral Code</label>
+            <input type="text" id="referral-code" readonly style="background:#f0f0f0; text-align:center;">
+        </div>
+        <button class="btn" onclick="copyReferral()">📋 Copy Referral Link</button>
+        <div class="info-box" style="margin-top:15px;">
+            <h3>📊 Your Referrals</h3>
+            <p id="referral-count">0 people joined</p>
+            <p id="referral-earnings">R0 earned</p>
+        </div>
+    </div>
+
+    <!-- PAGE 8: BONUS -->
+    <div id="bonus-page" class="page">
+        <h2>✨ Bonus Center</h2>
+        <div class="form-group">
+            <label>Enter Bonus Code</label>
+            <input type="text" id="bonus-code" placeholder="Enter code (e.g. SA11)">
+        </div>
+        <button class="btn" onclick="redeemBonus()">Redeem Code</button>
+        <div class="info-box" style="margin-top:15px;">
+            <h3>Available Bonuses</h3>
+            <p>🎁 <strong>SA11</strong> - Get R750 instantly!</p>
+            <p>🎁 <strong>WELCOME100</strong> - First deposit bonus</p>
+        </div>
+    </div>
+
+    <!-- PAGE 9: PRODUCTS (User's active investments) -->
+    <div id="products-page" class="page">
+        <h2>📦 My Investments</h2>
+        <div id="user-products-container"></div>
+        <button class="btn" style="background:#666; margin-top:15px;" onclick="showPage('home-page')">Back to Home</button>
+    </div>
+
+    <!-- PAGE 10: MY ACCOUNT -->
+    <div id="my-page" class="page">
+        <div class="profile-card">
+            <div id="profile-phone"></div>
+            <div id="profile-userid"></div>
+            <div class="stats">
+                <div class="stat"><div class="stat-value" id="earnings-total">R0</div><div class="stat-label">Total Earnings</div></div>
+                <div class="stat"><div class="stat-value" id="withdrawable-balance">R0</div><div class="stat-label">Withdrawable</div></div>
+            </div>
+        </div>
+
+        <div class="menu-item" onclick="showPage('profile-page')">
+            <span>👤 My Profile</span> <span>→</span>
+        </div>
+        <div class="menu-item" onclick="showPage('details-page')">
+            <span>📋 Transaction Details</span> <span>→</span>
+        </div>
+        <div class="menu-item" onclick="showPage('about-page')">
+            <span>ℹ️ About Us</span> <span>→</span>
+        </div>
+        <div class="menu-item" onclick="showPage('withdrawal-history-page')">
+            <span>📤 Withdrawal History</span> <span>→</span>
+        </div>
+        <div class="menu-item" onclick="showPage('deposit-history-page')">
+            <span>📥 Deposit History</span> <span>→</span>
+        </div>
+        <div class="menu-item" onclick="logout()">
+            <span>🚪 Log Out</span> <span>→</span>
+        </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div id="profile-page" class="page">
+        <h2>👤 My Profile</h2>
+        <div class="info-box">
+            <p><strong>Phone:</strong> <span id="profile-phone-detail"></span></p>
+            <p><strong>User ID:</strong> <span id="profile-userid-detail"></span></p>
+            <p><strong>Referral Code:</strong> <span id="profile-referral"></span></p>
+            <p><strong>Referred By:</strong> <span id="profile-referredby"></span></p>
+            <p><strong>Member Since:</strong> <span id="profile-joindate"></span></p>
+        </div>
+        <button class="btn" style="background:#666;" onclick="showPage('my-page')">Back</button>
+    </div>
+
+    <!-- DETAILS PAGE (Balance History) -->
+    <div id="details-page" class="page">
+        <h2>📋 Balance History</h2>
+        <div id="balance-history"></div>
+        <button class="btn" style="background:#666;" onclick="showPage('my-page')">Back</button>
+    </div>
+
+    <!-- ABOUT US PAGE -->
+    <div id="about-page" class="page">
+        <h2>ℹ️ About Us</h2>
+        <div class="info-box">
+            <p>Wealthprimesa has been a trusted investment platform in South Africa for <strong>6+ years</strong>.</p>
+            <p>FSCA regulated and committed to providing secure, transparent investment opportunities.</p>
+            <p>Our mission is to help South Africans grow their wealth through smart investments.</p>
+        </div>
+        <button class="btn" onclick="window.open('https://chat.whatsapp.com/Dkv5lO4nElZ28vH6l5VZRP', '_blank')">
+            📱 Join Our WhatsApp Group
+        </button>
+        <button class="btn" style="background:#666; margin-top:10px;" onclick="showPage('my-page')">Back</button>
+    </div>
+
+    <!-- WITHDRAWAL HISTORY PAGE -->
+    <div id="withdrawal-history-page" class="page">
+        <h2>📤 Withdrawal History</h2>
+        <div id="withdrawal-history-list"></div>
+        <button class="btn" style="background:#666;" onclick="showPage('my-page')">Back</button>
+    </div>
+
+    <!-- DEPOSIT HISTORY PAGE -->
+    <div id="deposit-history-page" class="page">
+        <h2>📥 Deposit History</h2>
+        <div id="deposit-history-list"></div>
+        <button class="btn" style="background:#666;" onclick="showPage('my-page')">Back</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-item" onclick="showPage('home-page')"><span class="nav-icon">🏠</span><span>Home</span></button>
+        <button class="nav-item" onclick="showPage('products-page')"><span class="nav-icon">📦</span><span>Product</span></button>
+        <button class="nav-item" onclick="showPage('promotion-page')"><span class="nav-icon">🎁</span><span>Promo</span></button>
+        <button class="nav-item" onclick="showPage('my-page')"><span class="nav-icon">👤</span><span>My</span></button>
+    </div>
+</div>
+
+<script>
+    // ============ DATA STORAGE ============
+    let users = JSON.parse(localStorage.getItem('wealthprimesa_users') || '[]');
+    let currentUser = null;
+    let selectedPayment = null;
+    let depositAmount = 0;
+
+    function saveUsers() { localStorage.setItem('wealthprimesa_users', JSON.stringify(users)); }
+
+    function getCurrentUser() {
+        let userId = localStorage.getItem('currentUserId');
+        if(!userId) return null;
+        return users.find(u => u.id == userId);
+    }
+
+    // Generate random ID
+    function generateId() { return Date.now() + '-' + Math.random().toString(36).substr(2, 6); }
+
+    // ============ SIGN UP ============
+    function signup() {
+        let phone = document.getElementById('signup-phone').value;
+        let password = document.getElementById('signup-password').value;
+        let confirm = document.getElementById('signup-confirm').value;
+        let refCode = document.getElementById('signup-ref').value;
+
+        if(!phone || !password) { alert('Please fill all fields'); return; }
+        if(password !== confirm) { alert('Passwords do not match'); return; }
+        if(users.find(u => u.phone === phone)) { alert('Phone number already registered'); return; }
+
+        let userId = 'WP' + Math.floor(Math.random() * 1000000);
+        let myReferralCode = userId.slice(-6);
+        
+        let newUser = {
+            id: generateId(),
+            phone: phone,
+            password: password,
+            userId: userId,
+            referralCode: myReferralCode,
+            referredBy: null,
+            earnings: 0,
+            withdrawable: 0,
+            deposits: [],
+            withdrawals: [],
+            investments: [],
+            balanceHistory: [{date: new Date().toISOString(), amount: 0, type: 'Account Created'}],
+            joinDate: new Date().toISOString()
+        };
+
+        // Handle referral
+        if(refCode) {
+            let referrer = users.find(u => u.referralCode === refCode);
+            if(referrer) {
+                newUser.referredBy = referrer.userId;
+                // Bonus R50 for new user
+                newUser.withdrawable += 50;
+                newUser.balanceHistory.push({date: new Date().toISOString(), amount: 50, type: 'Referral Bonus'});
+            }
+        }
+
+        users.push(newUser);
+        saveUsers();
+        localStorage.setItem('currentUserId', newUser.id);
+        alert('Account created successfully! Welcome bonus added.');
+        loadDashboard();
+        showPage('home-page');
+    }
+
+    // ============ SIGN IN ============
+    function signin() {
+        let phone = document.getElementById('signin-phone').value;
+        let password = document.getElementById('signin-password').value;
+        let user = users.find(u => u.phone === phone && u.password === password);
+        if(!user) { alert('Invalid phone or password'); return; }
+        localStorage.setItem('currentUserId', user.id);
+        loadDashboard();
+        showPage('home-page');
+    }
+
+    // ============ LOAD DASHBOARD ============
+    function loadDashboard() {
+        currentUser = getCurrentUser();
+        if(!currentUser) return;
+        
+        // Update profile displays
+        document.getElementById('profile-phone-detail').innerText = currentUser.phone;
+        document.getElementById('profile-userid-detail').innerText = currentUser.userId;
+        document.getElementById('profile-referral').innerText = currentUser.referralCode;
+        document.getElementById('profile-referredby').innerText = currentUser.referredBy || 'None';
+        document.getElementById('profile-joindate').innerText = new Date(currentUser.joinDate).toLocaleDateString();
+        document.getElementById('profile-phone').innerHTML = `<strong>${currentUser.phone}</strong>`;
+        document.getElementById('profile-userid').innerHTML = `User ID: ${currentUser.userId}`;
+        document.getElementById('earnings-total').innerHTML = `R${currentUser.earnings}`;
+        document.getElementById('withdrawable-balance').innerHTML = `R${currentUser.withdrawable}`;
+        document.getElementById('withdrawable-display').innerHTML = `💰 Available Balance: R${currentUser.withdrawable}`;
+        document.getElementById('referral-code').value = currentUser.referralCode;
+        
+        let referrals = users.filter(u => u.referredBy === currentUser.userId);
+        document.getElementById('referral-count').innerHTML = `${referrals.length} people joined`;
+        let refEarnings = referrals.length * 50;
+        document.getElementById('referral-earnings').innerHTML = `R${refEarnings} earned`;
+        
+        renderProducts();
+        renderUserProducts();
+        renderWithdrawalHistory();
+        renderDepositHistory();
+        renderBalanceHistory();
+    }
+
+    // Products array
+    const products = [
+        { id:0, name:'Product 0', price:0, returns:300, duration:30, daily:10, max:1, newUser:true },
+        { id:1, name:'Product 1', price:50, returns:480, duration:2, hourly:10, max:1 },
+        { id:2, name:'Product 2', price:100, returns:1250, duration:5, daily:250, max:1 },
+        { id:3, name:'Product 3', price:180, returns:1500, duration:10, daily:150, max:3 },
+        { id:4, name:'Product 4', price:300, returns:3000, duration:30, daily:100, max:2 },
+        { id:5, name:'Product 5', price:500, returns:4000, duration:20, daily:200, max:1 },
+        { id:6, name:'Product 6', price:1000, returns:6000, duration:30, daily:200, max:1 }
+    ];
+
+    function renderProducts() {
+        let container = document.getElementById('products-container');
+        if(!container) return;
+        container.innerHTML = '';
+        
+        for(let p of products) {
+            let userInvest = currentUser.investments.filter(inv => inv.productId === p.id && inv.status === 'active').length;
+            let remaining = p.max - userInvest;
+            
+            let card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-header">
+                    <span>${p.name}</span>
+                    <span>${userInvest}/${p.max} <span class="badge">${p.newUser ? 'VIP0' : ''}</span></span>
+                </div>
+                <div class="product-details">
+                    <p>💰 Return: R${p.returns}</p>
+                    <p>📅 Duration: ${p.duration} days</p>
+                    ${p.daily ? `<p>📊 R${p.daily} per day</p>` : ''}
+                    ${p.hourly ? `<p>⏰ R${p.hourly} per hour</p>` : ''}
+                    ${p.newUser ? '<p><strong>🎁 NEW USER ONLY</strong></p>' : ''}
+                </div>
+                <div class="product-footer">
+                    <span class="price">R${p.price}</span>
+                    <button class="invest-btn" onclick="investProduct(${p.id}, ${p.price})" ${remaining <= 0 ? 'disabled style="opacity:0.5"' : ''}>Invest</button>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+    }
+
+    function investProduct(productId, price) {
+        if(currentUser.withdrawable < price) {
+            alert('Insufficient balance. Please deposit first.');
+            return;
+        }
+        
+        let product = products.find(p => p.id === productId);
+        let userInvest = currentUser.investments.filter(inv => inv.productId === productId && inv.status === 'active').length;
+        if(userInvest >= product.max) {
+            alert('You have reached the maximum for this product');
+            return;
+        }
+        
+        if(confirm(`Invest R${price} in ${product.name}? You will earn R${product.returns} after ${product.duration} days.`)) {
+            currentUser.withdrawable -= price;
+            currentUser.investments.push({
+                productId: productId,
+                productName: product.name,
+                amount: price,
+                expectedReturn: product.returns,
+                startDate: new Date().toISOString(),
+                expiryDate: new Date(Date.now() + product.duration * 24 * 60 * 60 * 1000).toISOString(),
+                status: 'active'
+            });
+            currentUser.balanceHistory.push({date: new Date().toISOString(), amount: -price, type: `Investment in ${product.name}`});
+            saveUsers();
+            loadDashboard();
+            alert(`Successfully invested R${price} in ${product.name}!`);
+        }
+    }
+
+    function renderUserProducts() {
+        let container = document.getElementById('user-products-container');
+        if(!container) return;
+        let active = currentUser.investments.filter(i => i.status === 'active');
+        if(active.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#666;">No active investments yet.</p>';
+            return;
+        }
+        container.innerHTML = '';
+        for(let inv of active) {
+            let expDate = new Date(inv.expiryDate);
+            let daysLeft = Math.ceil((expDate - new Date()) / (1000*60*60*24));
+            let div = document.createElement('div');
+            div.className = 'product-card';
+            div.innerHTML = `
+                <div class="product-header"><span>${inv.productName}</span><span class="badge">Active</span></div>
+                <div class="product-details">
+                    <p>💰 Invested: R${inv.amount}</p>
+                    <p>🎯 Expected Return: R${inv.expectedReturn}</p>
+                    <p>⏰ ${daysLeft > 0 ? daysLeft + ' days remaining' : 'Matures soon'}</p>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+    }
+
+    // ============ DEPOSIT ============
+    function setDepositAmount(amt) { document.getElementById('deposit-amount').value = amt; }
+    function selectPayment(method) {
+        selectedPayment = method;
+        document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+        document.getElementById(`payment-${method}`).classList.add('selected');
+    }
+    function proceedToPayment() {
+        let amount = parseInt(document.getElementById('deposit-amount').value);
+        if(!amount || amount < 50) { alert('Please enter a valid amount (minimum R50)'); return; }
+        if(!selectedPayment) { alert('Please select a payment method'); return; }
+        depositAmount = amount;
+        document.getElementById('payment-amount').innerText = amount;
+        document.getElementById('payment-ref').innerText = 'WP' + Date.now();
+        showPage('payment-page');
+    }
+    function submitDeposit() {
+        let file = document.getElementById('proof-file').files[0];
+        if(!file) { alert('Please upload proof of payment'); return; }
+        
+        currentUser.deposits.push({
+            amount: depositAmount,
+            date: new Date().toISOString(),
+            status: 'pending',
+            reference: document.getElementById('payment-ref').innerText
+        });
+        saveUsers();
+        alert(`Deposit of R${depositAmount} submitted! Waiting for admin approval.`);
+        showPage('deposit-history-page');
+        loadDashboard();
+    }
+
+    // ============ WITHDRAWAL ============
+    function requestWithdrawal() {
+        let amount = parseFloat(document.getElementById('withdraw-amount').value);
+        let bank = document.getElementById('withdraw-bank').value;
+        let account = document.getElementById('withdraw-account').value;
+        
+        if(!amount || amount < 50) { alert('Minimum withdrawal is R50'); return; }
+        if(!account) { alert('Please enter account number'); return; }
+        if(amount > currentUser.withdrawable) { alert('Insufficient withdrawable balance'); return; }
+        
+        if(confirm(`Request withdrawal of R${amount} to ${bank} account ${account}?`)) {
+            currentUser.withdrawable -= amount;
+            currentUser.withdrawals.push({
+                amount: amount,
+                bank: bank,
+                account: account,
+                date: new Date().toISOString(),
+                status: 'pending'
+            });
+            currentUser.balanceHistory.push({date: new Date().toISOString(), amount: -amount, type: 'Withdrawal Request'});
+            saveUsers();
+            alert('Withdrawal request submitted! Will be processed within 24 hours.');
+            loadDashboard();
+            showPage('withdrawal-history-page');
+        }
+    }
+
+    // ============ BONUS ============
+    function redeemBonus() {
+        let code = document.getElementById('bonus-code').value.toUpperCase();
+        if(code === 'SA11') {
+            currentUser.withdrawable += 750;
+            currentUser.balanceHistory.push({date: new Date().toISOString(), amount: 750, type: 'Bonus Code SA11'});
+            saveUsers();
+            alert('🎉 Congratulations! You received R750 bonus!');
+            loadDashboard();
+        } else {
+            alert('Invalid bonus code');
+        }
+        document.getElementById('bonus-code').value = '';
+    }
+
+    // ============ HISTORY RENDERING ============
+    function renderWithdrawalHistory() {
+        let container = document.getElementById('withdrawal-history-list');
+        if(!container) return;
+        if(currentUser.withdrawals.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#666;">No withdrawals yet.</p>';
+            return;
+        }
+        container.innerHTML = '';
+        for(let w of currentUser.withdrawals.reverse()) {
+            let div = document.createElement('div');
+            div.className = 'transaction';
+            div.innerHTML = `<span>R${w.amount} to ${w.bank}</span><span class="${w.status}">${w.status.toUpperCase()}</span><span>${new Date(w.date).toLocaleDateString()}</span>`;
+            container.appendChild(div);
+        }
+    }
+
+    function renderDepositHistory() {
+        let container = document.getElementById('deposit-history-list');
+        if(!container) return;
+        if(currentUser.deposits.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#666;">No deposits yet.</p>';
+            return;
+        }
+        container.innerHTML = '';
+        for(let d of currentUser.deposits.reverse()) {
+            let div = document.createElement('div');
+            div.className = 'transaction';
+            div.innerHTML = `<span>R${d.amount}</span><span class="${d.status}">${d.status.toUpperCase()}</span><span>${new Date(d.date).toLocaleDateString()}</span>`;
+            container.appendChild(div);
+        }
+    }
+
+    function renderBalanceHistory() {
+        let container = document.getElementById('balance-history');
+        if(!container) return;
+        if(!currentUser.balanceHistory || currentUser.balanceHistory.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#666;">No transaction history.</p>';
+            return;
+        }
+        container.innerHTML = '';
+        for(let h of currentUser.balanceHistory.reverse().slice(0,20)) {
+            let div = document.createElement('div');
+            div.className = 'transaction';
+            let sign = h.amount >= 0 ? '+' : '';
+            div.innerHTML = `<span>${h.type}</span><span style="color:${h.amount>=0?'green':'red'}">${sign}R${h.amount}</span><span>${new Date(h.date).toLocaleDateString()}</span>`;
+            container.appendChild(div);
+        }
+    }
+
+    // ============ UTILITIES ============
+    function copyReferral() {
+        let link = `https://wealthprimesa.com/signup?ref=${currentUser.referralCode}`;
+        navigator.clipboard.writeText(link);
+        alert('Referral link copied!');
+    }
+
+    function logout() {
+        localStorage.removeItem('currentUserId');
+        location.reload();
+    }
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        loadDashboard();
+    }
+
+    // Auto-load if user logged in
+    if(getCurrentUser()) {
+        loadDashboard();
+        showPage('home-page');
+    }
+</script>
+</body>
+</html>
